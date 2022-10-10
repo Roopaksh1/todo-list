@@ -16,6 +16,13 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(svg|png)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: "./images/[hash][name][ext]",
+        },
+      },
     ],
   },
   output: {

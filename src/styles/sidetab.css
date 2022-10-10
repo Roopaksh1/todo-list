@@ -1,0 +1,32 @@
+.sidetab {
+  grid-row: 2;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  font-size: 3rem;
+  padding: 2.5rem 4rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.sidetab .btn-wrapper, .sidetab .project-heading, .sidetab .project li {
+  padding: 1rem;
+}
+
+.sidetab .btn-wrapper:hover, .sidetab .project li:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
+}
+
+.sidetab.closed {
+  transform: translateX(-30rem);
+}
+
+.sidetab .project {
+  padding: 1rem 0 1rem 2rem;
+  list-style: inside;
+  font-size: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
