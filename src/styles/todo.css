@@ -1,0 +1,79 @@
+.todo-wrapper {
+  grid-area: 2/2/-1/-1;
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-wrapper.expand {
+  grid-area: 2/1/-1/-1;
+}
+
+.todo {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 5rem;
+  padding: 3rem;
+  font-size: 3rem;
+  border-bottom: solid #8d99ae 2px;
+}
+
+.todo input {
+  margin-right: 2rem;
+}
+
+.todo-due-date {
+  margin-top: 2rem;
+}
+
+.todo input {
+  appearance: none;
+  width: 3rem;
+  height: 3rem;
+  border: solid black 1px;
+}
+
+.todo input:checked:before {
+  content: "✓";
+  display: block;
+  text-align: center;
+  font-size: 3rem;
+}
+
+form #description {
+  outline: none;
+  resize: none;
+  padding: 1rem;
+  max-width: 80rem;
+}
+
+form #title,
+form #description,
+form #priority {
+  font-size: 2rem;
+  outline: none;
+}
+
+form #duedate {
+  font-size: 2rem;
+  outline: none;
+}
+
+form div {
+  text-align: end;
+}
+
+form div * {
+  padding: 1.5rem;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+form .submit-todo {
+  background-color: #4caf50;
+}
+
+form .close-todo {
+  background-color: #ff9800;
+  margin-right: 2rem;
+}

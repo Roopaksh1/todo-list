@@ -1,5 +1,6 @@
 import "../styles/header.css";
 import { toggleSideTab } from "./sidetab";
+import { openTodoForm } from "./todoController";
 
 
 export const header = () => {
@@ -11,4 +12,5 @@ export const header = () => {
 
 export const bindHeaderEvents = () => {
   document.querySelector(".sidetab-btn").addEventListener("click", toggleSideTab);
+  document.querySelector(".add-btn").addEventListener("click", openTodoForm);
 }

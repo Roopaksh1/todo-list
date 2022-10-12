@@ -1,7 +1,9 @@
 import "../styles/sidetab.css";
+import { todoWrapperToggle } from "./todoController";
 
 export const toggleSideTab = () => {
   document.querySelector(".sidetab").classList.toggle("closed");
+  todoWrapperToggle();
 };
 
 export const sidetab = () => {

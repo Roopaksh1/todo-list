@@ -1,3 +1,5 @@
+import { insertTodo } from "./todoController";
+
 export class Todo {
   static todoID = 1;
 
@@ -47,3 +49,9 @@ export class Todo {
   }
 }
 
+export const createTodo = () => {
+  const todo = new Todo("Title", "yooyyoyo", "12/03/2022", "high");
+  const todo2 = new Todo("Title2", "yooyyoyo", "12/03/2022", "high");
+  const project = [todo, todo2];
+  insertTodo(project);
+};

@@ -1,5 +1,5 @@
 .sidetab {
-  grid-row: 2;
+  grid-area: 2/1/-1/2;
   background-color: #fafafa;
   display: flex;
   flex-direction: column;
