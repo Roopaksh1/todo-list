@@ -1,18 +1,6 @@
+import { format } from "date-fns";
 import "../styles/todo.css";
-
-const overlay = (element) => {
-  const overlay = document.querySelector(".overlay");
-  if (overlay === null) {
-    const temp = document.createElement("div");
-    temp.classList.add("overlay");
-    document.body.append(temp);
-    temp.innerHTML = "";
-    temp.append(element);
-  } else {
-    overlay.innerHTML = "";
-    overlay.append(element);
-  }
-};
+import { createTodo } from "./todo";
 
 export const todoWrapperToggle = () => {
   document.querySelector(".todo-wrapper").classList.toggle("expand");
@@ -22,7 +10,7 @@ export const openTodoForm = () => {
   const form = document.createElement("form");
   form.innerHTML = `<p>
   <label for="title">Title:</label>
-  <input id="title" type="text" required maxlength="20"/>
+  <input id="title" type="text" required maxlength="20" />
   <label for="duedate">Due Date:</label>
   <input id="duedate" type="datetime-local" required />
   <label for="priority">Priority:</label>
@@ -35,12 +23,17 @@ export const openTodoForm = () => {
 <p>
   <label for="description">Description:</label>
 </p>
-<textarea id="description" rows="10"></textarea>
+<p class="desc-wrapper">
+  <textarea id="description" rows="10"></textarea>
+  <label for="project">Project:</label>
+  <input type="text" id="project" required maxlength="20" value="Inbox" />
+</p>
 <div>
-  <button type="button" class="close-todo">Close</button> 
+  <button type="button" class="close-todo">Close</button>
   <button type="submit" class="submit-todo">Add Task</button>
 </div>`;
-  overlay(form);
+overlay(form);
+bindFormEvents();
 };
 
 export const insertTodo = (project) => {
@@ -73,3 +66,44 @@ export const todoWrapper = () => {
   todoWrapper.classList.add("todo-wrapper");
   return todoWrapper;
 };
+
+const bindFormEvents = () => {
+  document.querySelector(".submit-todo").addEventListener("click", handleFormEvents);
+  document.querySelector(".close-todo").addEventListener("click", handleFormEvents);
+}
+
+const handleFormEvents = (e) => {
+  if (Array.from(e.target.classList).includes("submit-todo")) {
+    e.preventDefault();
+    getFieldValues();
+    closeTodoForm();
+  } else {
+    closeTodoForm();
+  }
+}
+
+const overlay = (element) => {
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    document.body.append(overlay);
+    overlay.append(element);
+};
+
+const getFieldValues = () => {
+  const title = document.querySelector("#title").value;
+  const desc = document.querySelector("#description").value;
+  const dueDate = document.querySelector("#duedate").value;
+  const priority = document.querySelector("#priority").value;
+  const project = document.querySelector("#project").value;
+  const date = extractDate(dueDate);
+  createTodo(title, desc, date, priority, project);
+}
+
+const closeTodoForm = () => {
+  document.querySelector(".overlay").remove();
+}
+
+const extractDate = (date) => {
+  const arr = date.split(/-|T|:/);
+  return format(new Date(...arr), "yyyy-MM-dd | H-mm a");
+}

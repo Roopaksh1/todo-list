@@ -43,7 +43,7 @@ form #description {
   outline: none;
   resize: none;
   padding: 1rem;
-  max-width: 80rem;
+  width: 60rem;
 }
 
 form #title,
@@ -54,6 +54,17 @@ form #priority {
 }
 
 form #duedate {
+  font-size: 1.5rem;
+  outline: none;
+}
+
+form .desc-wrapper {
+  display: flex;
+}
+
+form #project {
+  align-self: start;
+  margin-top: 1.5rem;
   font-size: 2rem;
   outline: none;
 }
