@@ -78,9 +78,13 @@ const bindFormEvents = () => {
 
 const handleFormEvents = (e) => {
   if (Array.from(e.target.classList).includes("submit-todo")) {
-    e.preventDefault();
-    getFieldValues();
-    closeTodoForm();
+    if (document.querySelector("form").reportValidity()) {
+      e.preventDefault();
+      getFieldValues();
+      closeTodoForm();
+    } else {
+      
+    }
   } else {
     closeTodoForm();
   }
