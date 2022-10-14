@@ -2,6 +2,14 @@ import { format } from "date-fns";
 import "../styles/todo.css";
 import { createTodo } from "./todo";
 
+export const displayProjectName = (projectName) => {
+  if (!projectName.match(/^inbox$/i)) {
+    document.querySelector(
+      ".project-list"
+    ).innerHTML += `<li>${projectName}</li>`;
+  }
+};
+
 export const todoWrapperToggle = () => {
   document.querySelector(".todo-wrapper").classList.toggle("expand");
 };
@@ -83,7 +91,6 @@ const handleFormEvents = (e) => {
       getFieldValues();
       closeTodoForm();
     } else {
-      
     }
   } else {
     closeTodoForm();
