@@ -32,8 +32,8 @@ export const openTodoForm = () => {
   <button type="button" class="close-todo">Close</button>
   <button type="submit" class="submit-todo">Add Task</button>
 </div>`;
-overlay(form);
-bindFormEvents();
+  overlay(form);
+  bindFormEvents();
 };
 
 export const insertTodo = (project) => {
@@ -68,9 +68,13 @@ export const todoWrapper = () => {
 };
 
 const bindFormEvents = () => {
-  document.querySelector(".submit-todo").addEventListener("click", handleFormEvents);
-  document.querySelector(".close-todo").addEventListener("click", handleFormEvents);
-}
+  document
+    .querySelector(".submit-todo")
+    .addEventListener("click", handleFormEvents);
+  document
+    .querySelector(".close-todo")
+    .addEventListener("click", handleFormEvents);
+};
 
 const handleFormEvents = (e) => {
   if (Array.from(e.target.classList).includes("submit-todo")) {
@@ -80,13 +84,13 @@ const handleFormEvents = (e) => {
   } else {
     closeTodoForm();
   }
-}
+};
 
 const overlay = (element) => {
-    const overlay = document.createElement("div");
-    overlay.classList.add("overlay");
-    document.body.append(overlay);
-    overlay.append(element);
+  const overlay = document.createElement("div");
+  overlay.classList.add("overlay");
+  document.body.append(overlay);
+  overlay.append(element);
 };
 
 const getFieldValues = () => {
@@ -97,13 +101,13 @@ const getFieldValues = () => {
   const project = document.querySelector("#project").value;
   const date = extractDate(dueDate);
   createTodo(title, desc, date, priority, project);
-}
+};
 
 const closeTodoForm = () => {
   document.querySelector(".overlay").remove();
-}
+};
 
 const extractDate = (date) => {
   const arr = date.split(/-|T|:/);
   return format(new Date(...arr), "yyyy-MM-dd | H-mm a");
-}
+};

@@ -18,10 +18,10 @@ export class Project {
 
 export const addToProject = (name, todo) => {
   if (name in Project.list) {
-    Project.list.name.addTodo(todo);
+    Project.list[name].addTodo(todo);
   } else {
     const project = new Project(todo);
-    Project.list.name = project;
+    Project.list[name] = project;
   }
-  insertTodo(Project.list.name.todoList);
+  insertTodo(Project.list[name].todoList);
 };
