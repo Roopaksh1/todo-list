@@ -9,11 +9,11 @@
   transition: all 0.3s ease-in-out;
 }
 
-.sidetab .btn-wrapper, .sidetab .project-heading, .sidetab .project li {
+.sidetab .btn-wrapper, .sidetab .project-heading, .sidetab .project-list li {
   padding: 1rem;
 }
 
-.sidetab .btn-wrapper:hover, .sidetab .project li:hover {
+.sidetab .btn-wrapper:hover, .sidetab .project-list li:hover {
   background-color: #eeeeee;
   cursor: pointer;
 }
@@ -22,7 +22,7 @@
   transform: translateX(-30rem);
 }
 
-.sidetab .project {
+.sidetab .project-list {
   padding: 1rem 0 1rem 2rem;
   list-style: inside;
   font-size: 2.5rem;

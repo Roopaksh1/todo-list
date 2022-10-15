@@ -41,3 +41,7 @@ label {
   font-size: 2.5rem;
   margin: 1.5rem;
 }
+
+.active {
+  background-color: #eeeeee;
+}

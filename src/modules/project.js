@@ -1,4 +1,4 @@
-import { displayProjectName, insertTodo } from "./todoController";
+import { displayProjectName } from "./todoController";
 
 export class Project {
   static list = {};
@@ -24,5 +24,10 @@ export const addToProject = (name, todo) => {
     Project.list[name] = project;
   }
   displayProjectName(name);
-  insertTodo(Project.list[name].todoList);
 };
+
+export const getTodoList = (projectName) => {
+  if (projectName in Project.list) {
+    return Project.list[projectName].todoList;
+  }
+}

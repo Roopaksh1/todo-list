@@ -1,12 +1,17 @@
 import { format } from "date-fns";
 import "../styles/todo.css";
+import { getTodoList } from "./project";
+import { handleSidetabEvents } from "./sidetab";
 import { createTodo } from "./todo";
 
 export const displayProjectName = (projectName) => {
   if (!projectName.match(/^inbox$/i)) {
     document.querySelector(
       ".project-list"
-    ).innerHTML += `<li>${projectName}</li>`;
+    ).innerHTML += `<li class = "${projectName}">${projectName}</li>`;
+    document
+      .querySelector(`.${projectName}`)
+      .addEventListener("click", handleSidetabEvents);
   }
 };
 
@@ -44,29 +49,17 @@ export const openTodoForm = () => {
   bindFormEvents();
 };
 
-export const insertTodo = (project) => {
-  const wrapper = document.querySelector(".todo-wrapper");
-  wrapper.innerHTML = "";
-  project.forEach((todo) => {
-    const list = document.createElement("div");
-    list.classList.add("todo");
-    const div = document.createElement("div");
-    div.classList.add("title-date");
-    const checkbox = document.createElement("input");
-    checkbox.setAttribute("type", "checkbox");
-    const title = document.createElement("span");
-    title.classList.add("todo-title");
-    title.innerText = `${todo.title}`;
-    const dueDate = document.createElement("p");
-    dueDate.classList.add("todo-due-date");
-    dueDate.innerText = `${todo.dueDate}`;
-    const priority = document.createElement("span");
-    priority.classList.add("priority");
-    priority.innerHTML = `<i class="fa-regular fa-star"></i>`;
-    div.append(checkbox, title, dueDate);
-    list.append(div, priority);
-    wrapper.append(list);
-  });
+export const displayTodoList = () => {
+  const project = document.querySelector(".active");
+  if (Array.from(project.classList).includes("today-btn")) {
+    renderTodoList(null);
+  } else if (Array.from(project.classList).includes("inbox-btn")) {
+    const todoList = getTodoList("Inbox");
+    renderTodoList(todoList);
+  } else {
+    const todoList = getTodoList(project.textContent);
+    renderTodoList(todoList);
+  }
 };
 
 export const todoWrapper = () => {
@@ -121,4 +114,30 @@ const closeTodoForm = () => {
 const extractDate = (date) => {
   const arr = date.split(/-|T|:/);
   return format(new Date(...arr), "yyyy-MM-dd | H-mm a");
+};
+
+const renderTodoList = (todoList) => {
+  const wrapper = document.querySelector(".todo-wrapper");
+  wrapper.innerHTML = "";
+  if (!todoList) return;
+  todoList.forEach((todo) => {
+    const list = document.createElement("div");
+    list.classList.add("todo");
+    const div = document.createElement("div");
+    div.classList.add("title-date");
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    const title = document.createElement("span");
+    title.classList.add("todo-title");
+    title.innerText = `${todo.title}`;
+    const dueDate = document.createElement("p");
+    dueDate.classList.add("todo-due-date");
+    dueDate.innerText = `${todo.dueDate}`;
+    const priority = document.createElement("span");
+    priority.classList.add("priority");
+    priority.innerHTML = `<i class="fa-regular fa-star"></i>`;
+    div.append(checkbox, title, dueDate);
+    list.append(div, priority);
+    wrapper.append(list);
+  });
 };

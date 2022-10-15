@@ -51,5 +51,12 @@ export class Todo {
 
 export const createTodo = (title, desc, dueDate, priority, projectName) => {
   const todo = new Todo(title, desc, dueDate, priority);
+  projectName = updateProjectName(projectName);
   addToProject(projectName, todo);
 };
+
+const updateProjectName = (projectName) => {
+  if (projectName.match(/^inbox$/i)) {
+    return "Inbox";
+  } else return projectName;
+}
