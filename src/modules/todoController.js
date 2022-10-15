@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import "../styles/todo.css";
-import { getTodoList } from "./project";
+import { getTodoList, removeTodo } from "./project";
 import { handleSidetabEvents } from "./sidetab";
 import { createTodo } from "./todo";
 
@@ -55,10 +55,10 @@ export const displayTodoList = () => {
     renderTodoList(null);
   } else if (Array.from(project.classList).includes("inbox-btn")) {
     const todoList = getTodoList("Inbox");
-    renderTodoList(todoList);
+    renderTodoList(todoList, "Inbox");
   } else {
     const todoList = getTodoList(project.textContent);
-    renderTodoList(todoList);
+    renderTodoList(todoList, project.textContent);
   }
 };
 
@@ -108,6 +108,7 @@ const getFieldValues = () => {
 };
 
 const closeTodoForm = () => {
+  displayTodoList();
   document.querySelector(".overlay").remove();
 };
 
@@ -116,7 +117,7 @@ const extractDate = (date) => {
   return format(new Date(...arr), "yyyy-MM-dd | H-mm a");
 };
 
-const renderTodoList = (todoList) => {
+const renderTodoList = (todoList, projectName) => {
   const wrapper = document.querySelector(".todo-wrapper");
   wrapper.innerHTML = "";
   if (!todoList) return;
@@ -126,6 +127,7 @@ const renderTodoList = (todoList) => {
     const div = document.createElement("div");
     div.classList.add("title-date");
     const checkbox = document.createElement("input");
+    checkbox.setAttribute("data-id", `${todo.todoID}`);
     checkbox.setAttribute("type", "checkbox");
     const title = document.createElement("span");
     title.classList.add("todo-title");
@@ -139,5 +141,10 @@ const renderTodoList = (todoList) => {
     div.append(checkbox, title, dueDate);
     list.append(div, priority);
     wrapper.append(list);
+    document
+      .querySelector(`input[data-id="${todo.todoID}"]`)
+      .addEventListener("change", () => {
+        removeTodo(todo.todoID, projectName);
+      });
   });
 };

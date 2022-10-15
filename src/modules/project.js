@@ -1,4 +1,4 @@
-import { displayProjectName } from "./todoController";
+import { displayProjectName, displayTodoList } from "./todoController";
 
 export class Project {
   static list = {};
@@ -31,3 +31,10 @@ export const getTodoList = (projectName) => {
     return Project.list[projectName].todoList;
   }
 }
+
+export const removeTodo = (todoID, projectName) => {
+  const list = Project.list[projectName].todoList;
+  const index = list.findIndex((todo) => todo.todoID === todoID);
+  list.splice(index, 1);
+  displayTodoList();
+};
