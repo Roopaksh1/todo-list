@@ -136,7 +136,7 @@ const renderTodoList = (todoList, projectName) => {
     dueDate.classList.add("todo-due-date");
     dueDate.innerText = `${todo.dueDate}`;
     const priority = document.createElement("span");
-    priority.classList.add("priority");
+    priority.classList.add("priority", `${todo.priority}`);
     priority.innerHTML = `<i class="fa-regular fa-star"></i>`;
     div.append(checkbox, title, dueDate);
     list.append(div, priority);

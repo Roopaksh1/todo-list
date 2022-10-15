@@ -88,3 +88,15 @@ form .close-todo {
   background-color: #ff9800;
   margin-right: 2rem;
 }
+
+.priority.high .fa-star {
+  color: #e63946;
+}
+
+.priority.medium .fa-star {
+  color: #ffb703;
+}
+
+.priority.low .fa-star {
+  color: #06d6a0;
+}
