@@ -129,6 +129,7 @@ const renderTodoList = (todoList, projectName) => {
   todoList.forEach((todo) => {
     const list = document.createElement("div");
     list.classList.add("todo");
+    list.setAttribute("data-id", `${todo.todoID}`);
     const div = document.createElement("div");
     div.classList.add("title-date");
     const checkbox = document.createElement("input");
@@ -142,6 +143,7 @@ const renderTodoList = (todoList, projectName) => {
     dueDate.innerText = `${extractDate(todo.dueDate)}`;
     const priority = document.createElement("span");
     priority.classList.add("priority", `${todo.priority}`);
+    priority.setAttribute("title", `priority: ${todo.priority}`);
     priority.innerHTML = `<i class="fa-regular fa-star"></i>`;
     div.append(checkbox, title, dueDate);
     list.append(div, priority);
