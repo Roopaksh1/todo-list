@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import "../styles/todo.css";
-import { getTodoList, removeTodo } from "./project";
+import { getAllTodo, getTodoList, removeTodo } from "./project";
 import { handleSidetabEvents } from "./sidetab";
 import { createTodo } from "./todo";
 
@@ -25,7 +25,11 @@ export const openTodoForm = () => {
   <label for="title">Title:</label>
   <input id="title" type="text" required maxlength="20" />
   <label for="duedate">Due Date:</label>
-  <input id="duedate" type="datetime-local" required />
+  <input id="duedate" type="datetime-local" min="${new Date().getFullYear()}-${
+    new Date().getMonth() + 1
+  }-${new Date().getDate()}T${("0" + new Date().getHours()).slice(-2)}:${(
+    "0" + new Date().getMinutes()
+  ).slice(-2)}" required />
   <label for="priority">Priority:</label>
   <select id="priority">
     <option value="high">High</option>
@@ -52,7 +56,7 @@ export const openTodoForm = () => {
 export const displayTodoList = () => {
   const project = document.querySelector(".active");
   if (Array.from(project.classList).includes("today-btn")) {
-    renderTodoList(null);
+    renderTodoList(getAllTodo());
   } else if (Array.from(project.classList).includes("inbox-btn")) {
     const todoList = getTodoList("Inbox");
     renderTodoList(todoList, "Inbox");
@@ -103,8 +107,8 @@ const getFieldValues = () => {
   const dueDate = document.querySelector("#duedate").value;
   const priority = document.querySelector("#priority").value;
   const project = document.querySelector("#project").value;
-  const date = extractDate(dueDate);
-  createTodo(title, desc, date, priority, project);
+  // const date = extractDate(dueDate);
+  createTodo(title, desc, dueDate, priority, project);
 };
 
 const closeTodoForm = () => {
@@ -114,7 +118,8 @@ const closeTodoForm = () => {
 
 const extractDate = (date) => {
   const arr = date.split(/-|T|:/);
-  return format(new Date(...arr), "yyyy-MM-dd | H-mm a");
+  arr[1]--;
+  return format(new Date(...arr), "yyyy-LLL-dd | H:mm");
 };
 
 const renderTodoList = (todoList, projectName) => {
@@ -134,7 +139,7 @@ const renderTodoList = (todoList, projectName) => {
     title.innerText = `${todo.title}`;
     const dueDate = document.createElement("p");
     dueDate.classList.add("todo-due-date");
-    dueDate.innerText = `${todo.dueDate}`;
+    dueDate.innerText = `${extractDate(todo.dueDate)}`;
     const priority = document.createElement("span");
     priority.classList.add("priority", `${todo.priority}`);
     priority.innerHTML = `<i class="fa-regular fa-star"></i>`;

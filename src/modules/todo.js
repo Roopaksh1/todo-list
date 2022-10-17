@@ -2,8 +2,7 @@ import { addToProject } from "./project";
 
 export class Todo {
   static todoID = 1;
-  static allTodo = [];
-
+  
   constructor(title, description, dueDate, priority) {
     this._title = title;
     this._description = description;
@@ -52,7 +51,6 @@ export class Todo {
 
 export const createTodo = (title, desc, dueDate, priority, projectName) => {
   const todo = new Todo(title, desc, dueDate, priority);
-  Todo.allTodo.push[todo];
   projectName = updateProjectName(projectName);
   addToProject(projectName, todo);
 };
