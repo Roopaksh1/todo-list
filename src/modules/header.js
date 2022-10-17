@@ -1,6 +1,6 @@
 import "../styles/header.css";
 import { toggleSideTab } from "./sidetab";
-import { openTodoForm } from "./todoController";
+import { displayTodoList, openTodoForm } from "./todoController";
 
 export const header = () => {
   const header = document.createElement("div");
@@ -17,5 +17,6 @@ export const bindHeaderEvents = () => {
   document.querySelector(".home-btn").addEventListener("click", () => {
     document.querySelector(".active").classList.remove("active");
     document.querySelector(".today-btn").classList.add("active");
+    displayTodoList();
   });
 };
