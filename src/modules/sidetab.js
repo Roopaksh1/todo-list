@@ -10,12 +10,16 @@ export const handleSidetabEvents = (e) => {
   document.querySelector(".active").classList.remove("active");
   e.target.classList.add("active");
   displayTodoList();
-}
+};
 
 export const bindSidetabEvents = () => {
-  document.querySelector(".inbox-btn.btn-wrapper").addEventListener("click", handleSidetabEvents);
-  document.querySelector(".today-btn.btn-wrapper").addEventListener("click", handleSidetabEvents);
-}
+  document
+    .querySelector(".inbox-btn.btn-wrapper")
+    .addEventListener("click", handleSidetabEvents);
+  document
+    .querySelector(".today-btn.btn-wrapper")
+    .addEventListener("click", handleSidetabEvents);
+};
 
 export const sidetab = () => {
   const sidetab = document.createElement("div");

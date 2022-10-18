@@ -2,7 +2,7 @@ import { addToProject } from "./project";
 
 export class Todo {
   static todoID = 1;
-  
+
   constructor(title, description, dueDate, priority) {
     this._title = title;
     this._description = description;
@@ -21,7 +21,7 @@ export class Todo {
   }
 
   get description() {
-    return this._title;
+    return this._description;
   }
 
   set description(newDescription) {

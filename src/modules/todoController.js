@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import "../styles/todo.css";
-import { getAllTodo, getTodoList, removeTodo } from "./project";
+import { getAllTodo, getTodoByID, getTodoList, removeTodo } from "./project";
 import { handleSidetabEvents } from "./sidetab";
 import { createTodo } from "./todo";
 
@@ -107,7 +107,6 @@ const getFieldValues = () => {
   const dueDate = document.querySelector("#duedate").value;
   const priority = document.querySelector("#priority").value;
   const project = document.querySelector("#project").value;
-  // const date = extractDate(dueDate);
   createTodo(title, desc, dueDate, priority, project);
 };
 
@@ -127,10 +126,12 @@ const renderTodoList = (todoList, projectName) => {
   wrapper.innerHTML = "";
   if (!todoList) return;
   todoList.forEach((todo) => {
+    const wrap = document.createElement("div");
     const list = document.createElement("div");
     list.classList.add("todo");
     list.setAttribute("data-id", `${todo.todoID}`);
     const div = document.createElement("div");
+    const div2 = document.createElement("div");
     div.classList.add("title-date");
     const checkbox = document.createElement("input");
     checkbox.setAttribute("data-id", `${todo.todoID}`);
@@ -145,13 +146,70 @@ const renderTodoList = (todoList, projectName) => {
     priority.classList.add("priority", `${todo.priority}`);
     priority.setAttribute("title", `priority: ${todo.priority}`);
     priority.innerHTML = `<i class="fa-regular fa-star"></i>`;
+    const edit = document.createElement("span");
+    edit.classList.add("edit-btn");
+    edit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
     div.append(checkbox, title, dueDate);
-    list.append(div, priority);
-    wrapper.append(list);
+    div2.append(priority, edit);
+    list.append(div, div2);
+    wrap.append(list);
+    wrapper.append(wrap);
     document
       .querySelector(`input[data-id="${todo.todoID}"]`)
       .addEventListener("change", () => {
         removeTodo(todo.todoID, projectName);
       });
+    bindTodoEvents();
   });
+};
+
+const showFullTodo = (e) => {
+  const todo = getTodoByID(e.target.getAttribute("data-id"));
+  const div = document.createElement("div");
+  div.classList.add("full-todo");
+  div.innerHTML = `<div>
+  <p><b>Title:</b> ${todo.title}</p>
+  <p class="desc"><i class="fa-solid fa-arrow-up-right-from-square"></i><b>Description:</b> ${
+    todo.description
+  }</p>
+</div>
+<div>
+  <p><b>Due Date:</b> ${extractDate(todo.dueDate)}</p>
+  <p><b>Priority:</b> ${todo.priority}</p>
+</div>`;
+  e.target.parentNode.append(div);
+  e.target.removeEventListener("click", showFullTodo);
+  e.target.addEventListener("click", hideFullTodo);
+  document
+    .querySelector(".desc .fa-solid")
+    .addEventListener(
+      "click",
+      showDescription.bind(undefined, todo.description)
+    );
+};
+
+const hideFullTodo = (e) => {
+  e.target.parentNode.lastChild.remove();
+  e.target.removeEventListener("click", hideFullTodo);
+  e.target.addEventListener("click", showFullTodo);
+};
+
+const bindTodoEvents = () => {
+  document
+    .querySelectorAll(".todo")
+    .forEach((todo) => todo.addEventListener("click", showFullTodo));
+};
+
+const showDescription = (desc) => {
+  const div = document.createElement("div");
+  div.classList.add("full-desc");
+  div.innerHTML = `${desc} <button class="close-desc">Close</button>`;
+  overlay(div);
+  document
+    .querySelector(".full-desc .close-desc")
+    .addEventListener("click", hideDescription);
+};
+
+const hideDescription = () => {
+  document.querySelector(".overlay").remove();
 };

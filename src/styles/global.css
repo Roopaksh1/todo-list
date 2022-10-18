@@ -35,6 +35,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  max-width: clamp(60rem, 100rem, 100vw);
 }
 
 label {

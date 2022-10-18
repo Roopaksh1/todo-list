@@ -8,6 +8,11 @@
   grid-area: 2/1/-1/-1;
 }
 
+.todo-wrapper > div {
+  display: flex;
+  flex-direction: column;
+}
+
 .todo {
   display: flex;
   justify-content: space-between;
@@ -15,6 +20,11 @@
   padding: 3rem;
   font-size: 3rem;
   border-bottom: solid #8d99ae 2px;
+  cursor: pointer;
+}
+
+.todo:hover {
+  background-color: #f8f8f8;
 }
 
 .todo input {
@@ -99,4 +109,59 @@ form .close-todo {
 
 .priority.low .fa-star {
   color: #06d6a0;
+}
+
+.priority {
+  display: inline-block;
+  margin-right: 2rem;
+}
+
+.full-todo {
+  display: flex;
+  margin: 0 5rem;
+  padding: 3rem;
+  font-size: 3rem;
+  justify-content: space-between;
+}
+
+.full-todo .desc {
+  overflow: hidden;
+  max-width: 45vw;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.edit-btn {
+  padding: 1rem;
+}
+
+.edit-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.desc .fa-arrow-up-right-from-square {
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.desc .fa-arrow-up-right-from-square:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.full-desc {
+  padding: 2rem;
+  font-size: 2.5rem;
+  border: 1px solid black;
+  max-width: 50%;
+  word-break: break-all;
+  background-color: white;
+}
+
+.close-desc {
+  background-color: #ff9800;
+  margin: 1rem auto;
+  display: block;
+  font-size: 2rem;
+  padding: 1rem;
+  border: none;
 }

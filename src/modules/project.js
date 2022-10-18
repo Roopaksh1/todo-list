@@ -81,3 +81,11 @@ const getProjectNameByID = (ID) => {
     }
   }
 };
+
+export const getTodoByID = (todoID) => {
+  for (let project in Project.list) {
+    if (Project.list[project].todoList.find((todo) => todo.todoID == todoID)) {
+      return Project.list[project].todoList.find((todo) => todo.todoID == todoID);
+    }
+  }
+}
