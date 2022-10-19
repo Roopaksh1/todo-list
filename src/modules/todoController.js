@@ -19,7 +19,7 @@ export const todoWrapperToggle = () => {
   document.querySelector(".todo-wrapper").classList.toggle("expand");
 };
 
-export const openTodoForm = () => {
+export const openTodoForm = (e, edit, editTodo) => {
   const form = document.createElement("form");
   form.innerHTML = `<p>
   <label for="title">Title:</label>
@@ -43,14 +43,14 @@ export const openTodoForm = () => {
 <p class="desc-wrapper">
   <textarea id="description" rows="10"></textarea>
   <label for="project">Project:</label>
-  <input type="text" id="project" required maxlength="20" value="Inbox" />
+  <input type="text" id="project" required maxlength="20" value="Inbox" ${edit ? "readonly" : ""}/>
 </p>
 <div>
   <button type="button" class="close-todo">Close</button>
-  <button type="submit" class="submit-todo">Add Task</button>
+  ${edit ? `<button type="submit" class="edit-todo">Edit Task</button>` : '<button type="submit" class="submit-todo">Add Task</button>'}
 </div>`;
   overlay(form);
-  bindFormEvents();
+  bindFormEvents(edit, editTodo);
 };
 
 export const displayTodoList = () => {
@@ -72,20 +72,32 @@ export const todoWrapper = () => {
   return todoWrapper;
 };
 
-const bindFormEvents = () => {
-  document
+const bindFormEvents = (edit, editTodo) => {
+  if (edit) {
+    document
+    .querySelector(".edit-todo")
+    .addEventListener("click", (e) => handleFormEvents(e, editTodo));
+  } else {
+    document
     .querySelector(".submit-todo")
     .addEventListener("click", handleFormEvents);
+  }
   document
     .querySelector(".close-todo")
     .addEventListener("click", handleFormEvents);
 };
 
-const handleFormEvents = (e) => {
+function handleFormEvents(e, editTodo) {
+  e.preventDefault();
   if (Array.from(e.target.classList).includes("submit-todo")) {
     if (document.querySelector("form").reportValidity()) {
-      e.preventDefault();
       getFieldValues();
+      closeTodoForm();
+    } else {
+    }
+  } else if (Array.from(e.target.classList).includes("edit-todo")) {
+    if (document.querySelector("form").reportValidity()) {
+      getFieldValues(true, editTodo);
       closeTodoForm();
     } else {
     }
@@ -101,13 +113,17 @@ const overlay = (element) => {
   overlay.append(element);
 };
 
-const getFieldValues = () => {
+const getFieldValues = (edit, editTodo) => {
   const title = document.querySelector("#title").value;
   const desc = document.querySelector("#description").value;
   const dueDate = document.querySelector("#duedate").value;
   const priority = document.querySelector("#priority").value;
   const project = document.querySelector("#project").value;
-  createTodo(title, desc, dueDate, priority, project);
+  if (edit) {
+    updateTodo(editTodo, { title, desc, dueDate, priority });
+  } else {
+    createTodo(title, desc, dueDate, priority, project);
+  }
 };
 
 const closeTodoForm = () => {
@@ -148,23 +164,20 @@ const renderTodoList = (todoList, projectName) => {
     priority.innerHTML = `<i class="fa-regular fa-star"></i>`;
     const edit = document.createElement("span");
     edit.classList.add("edit-btn");
+    edit.setAttribute("data-id", `${todo.todoID}`);
     edit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
     div.append(checkbox, title, dueDate);
     div2.append(priority, edit);
     list.append(div, div2);
     wrap.append(list);
     wrapper.append(wrap);
-    document
-      .querySelector(`input[data-id="${todo.todoID}"]`)
-      .addEventListener("change", () => {
-        removeTodo(todo.todoID, projectName);
-      });
-    bindTodoEvents();
+    bindTodoEvents(todo.todoID);
   });
 };
 
-const showFullTodo = (e) => {
-  const todo = getTodoByID(e.target.getAttribute("data-id"));
+function showFullTodo(e) {
+  e.stopImmediatePropagation()
+  const todo = getTodoByID(this.getAttribute("data-id"));
   const div = document.createElement("div");
   div.classList.add("full-todo");
   div.innerHTML = `<div>
@@ -177,9 +190,9 @@ const showFullTodo = (e) => {
   <p><b>Due Date:</b> ${extractDate(todo.dueDate)}</p>
   <p><b>Priority:</b> ${todo.priority}</p>
 </div>`;
-  e.target.parentNode.append(div);
-  e.target.removeEventListener("click", showFullTodo);
-  e.target.addEventListener("click", hideFullTodo);
+  this.parentNode.append(div);
+  this.removeEventListener("click", showFullTodo);
+  this.addEventListener("click", hideFullTodo);
   document
     .querySelector(".desc .fa-solid")
     .addEventListener(
@@ -188,16 +201,23 @@ const showFullTodo = (e) => {
     );
 };
 
-const hideFullTodo = (e) => {
-  e.target.parentNode.lastChild.remove();
-  e.target.removeEventListener("click", hideFullTodo);
-  e.target.addEventListener("click", showFullTodo);
+function hideFullTodo(e) {
+  e.stopImmediatePropagation()
+  this.parentNode.lastChild.remove();
+  this.removeEventListener("click", hideFullTodo);
+  this.addEventListener("click", showFullTodo);
 };
 
-const bindTodoEvents = () => {
+const bindTodoEvents = (todoID) => {
   document
     .querySelectorAll(".todo")
     .forEach((todo) => todo.addEventListener("click", showFullTodo));
+  document
+    .querySelector(`input[data-id="${todoID}"]`)
+    .addEventListener("change", () => {
+      removeTodo(todoID);
+    });
+  document.querySelector(".todo .edit-btn").addEventListener("click", editTodo);
 };
 
 const showDescription = (desc) => {
@@ -213,3 +233,26 @@ const showDescription = (desc) => {
 const hideDescription = () => {
   document.querySelector(".overlay").remove();
 };
+
+function editTodo(e) {
+  e.stopImmediatePropagation();
+  const todoID = this.getAttribute("data-id");
+  const todo = getTodoByID(todoID);
+  openTodoForm(undefined, true, todo);
+  setOriginalValues(todo);
+};
+
+const setOriginalValues = (todo) => {
+  document.querySelector("#title").value = todo.title;
+  document.querySelector("#description").value = todo.description;
+  document.querySelector("#duedate").value = todo.dueDate;
+  document.querySelector("#priority").value = todo.priority;
+}
+
+const updateTodo = (todo, updatedValues) => {
+  todo.title = updatedValues.title;
+  todo.description = updatedValues.desc;
+  todo.dueDate = updatedValues.dueDate;
+  todo.priority = updatedValues.priority;
+  displayTodoList();
+}

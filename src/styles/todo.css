@@ -165,3 +165,7 @@ form .close-todo {
   padding: 1rem;
   border: none;
 }
+
+#project:read-only {
+  background-color: #80808059;
+}
