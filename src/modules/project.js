@@ -1,11 +1,16 @@
 import { compareAsc, isEqual } from "date-fns";
+import { removeFromStorage, storeProject } from "./storage";
 import { displayProjectName, displayTodoList } from "./todoController";
 
 export class Project {
   static list = {};
 
   constructor(todo) {
-    this._todoList = [todo];
+    if (todo) {
+      this._todoList = [todo];
+    } else {
+      this._todoList = []
+    }
   }
 
   get todoList() {
@@ -20,9 +25,11 @@ export class Project {
 export const addToProject = (name, todo) => {
   if (name in Project.list) {
     Project.list[name].addTodo(todo);
+    storeProject(name, todo);
   } else {
     const project = new Project(todo);
     Project.list[name] = project;
+    storeProject(name, project);
   }
   displayProjectName(name);
 };
@@ -41,6 +48,7 @@ export const removeTodo = (todoID, projectName) => {
   const list = Project.list[projectName].todoList;
   const index = list.findIndex((todo) => todo.todoID === todoID);
   list.splice(index, 1);
+  removeFromStorage(projectName, index);
   displayTodoList();
 };
 

@@ -3,12 +3,16 @@ import { addToProject } from "./project";
 export class Todo {
   static todoID = 1;
 
-  constructor(title, description, dueDate, priority) {
+  constructor(title, description, dueDate, priority, todoID) {
     this._title = title;
     this._description = description;
     this._dueDate = dueDate;
     this._priority = priority;
-    this._todoID = Todo.todoID;
+    if (todoID) {
+      this._todoID = todoID;
+    } else {
+      this._todoID = Todo.todoID;
+    }
     Todo.todoID++;
   }
 

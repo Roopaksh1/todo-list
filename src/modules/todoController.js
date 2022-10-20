@@ -1,8 +1,11 @@
 import { format } from "date-fns";
 import "../styles/todo.css";
-import { getAllTodo, getTodoByID, getTodoList, removeTodo } from "./project";
+import { getAllTodo, getTodoByID, getTodoList, Project, removeTodo } from "./project";
 import { handleSidetabEvents } from "./sidetab";
+import { fetchProject } from "./storage";
 import { createTodo } from "./todo";
+
+window.addEventListener("load", () => fetchProject(Project.list));
 
 export const displayProjectName = (projectName) => {
   if (!projectName.match(/^inbox$/i)) {
