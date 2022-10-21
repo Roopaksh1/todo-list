@@ -1,11 +1,27 @@
 import { format } from "date-fns";
 import "../styles/todo.css";
-import { getAllTodo, getTodoByID, getTodoList, Project, removeTodo } from "./project";
+import {
+  getAllTodo,
+  getTodoByID,
+  getTodoList,
+  Project,
+  removeTodo,
+} from "./project";
 import { handleSidetabEvents } from "./sidetab";
 import { fetchProject } from "./storage";
 import { createTodo } from "./todo";
 
 window.addEventListener("load", () => fetchProject(Project.list));
+
+export const backToHome = () => {
+  document.querySelector(".today-btn").classList.add("active");
+};
+
+export const removeProject = (projectName) => {
+  if (!projectName.match(/^inbox$/i)) {
+    document.querySelector(`.project-list .${projectName}`).remove();
+  }
+};
 
 export const displayProjectName = (projectName) => {
   if (!projectName.match(/^inbox$/i)) {
@@ -46,11 +62,17 @@ export const openTodoForm = (e, edit, editTodo) => {
 <p class="desc-wrapper">
   <textarea id="description" rows="10"></textarea>
   <label for="project">Project:</label>
-  <input type="text" id="project" required maxlength="20" value="Inbox" ${edit ? "readonly" : ""}/>
+  <input type="text" id="project" required maxlength="20" value="Inbox" ${
+    edit ? "readonly" : ""
+  }/>
 </p>
 <div>
   <button type="button" class="close-todo">Close</button>
-  ${edit ? `<button type="submit" class="edit-todo">Edit Task</button>` : '<button type="submit" class="submit-todo">Add Task</button>'}
+  ${
+    edit
+      ? `<button type="submit" class="edit-todo">Edit Task</button>`
+      : '<button type="submit" class="submit-todo">Add Task</button>'
+  }
 </div>`;
   overlay(form);
   bindFormEvents(edit, editTodo);
@@ -78,12 +100,12 @@ export const todoWrapper = () => {
 const bindFormEvents = (edit, editTodo) => {
   if (edit) {
     document
-    .querySelector(".edit-todo")
-    .addEventListener("click", (e) => handleFormEvents(e, editTodo));
+      .querySelector(".edit-todo")
+      .addEventListener("click", (e) => handleFormEvents(e, editTodo));
   } else {
     document
-    .querySelector(".submit-todo")
-    .addEventListener("click", handleFormEvents);
+      .querySelector(".submit-todo")
+      .addEventListener("click", handleFormEvents);
   }
   document
     .querySelector(".close-todo")
@@ -107,7 +129,7 @@ function handleFormEvents(e, editTodo) {
   } else {
     closeTodoForm();
   }
-};
+}
 
 const overlay = (element) => {
   const overlay = document.createElement("div");
@@ -179,7 +201,7 @@ const renderTodoList = (todoList, projectName) => {
 };
 
 function showFullTodo(e) {
-  e.stopImmediatePropagation()
+  e.stopImmediatePropagation();
   const todo = getTodoByID(this.getAttribute("data-id"));
   const div = document.createElement("div");
   div.classList.add("full-todo");
@@ -202,14 +224,14 @@ function showFullTodo(e) {
       "click",
       showDescription.bind(undefined, todo.description)
     );
-};
+}
 
 function hideFullTodo(e) {
-  e.stopImmediatePropagation()
+  e.stopImmediatePropagation();
   this.parentNode.lastChild.remove();
   this.removeEventListener("click", hideFullTodo);
   this.addEventListener("click", showFullTodo);
-};
+}
 
 const bindTodoEvents = (todoID) => {
   document
@@ -243,14 +265,14 @@ function editTodo(e) {
   const todo = getTodoByID(todoID);
   openTodoForm(undefined, true, todo);
   setOriginalValues(todo);
-};
+}
 
 const setOriginalValues = (todo) => {
   document.querySelector("#title").value = todo.title;
   document.querySelector("#description").value = todo.description;
   document.querySelector("#duedate").value = todo.dueDate;
   document.querySelector("#priority").value = todo.priority;
-}
+};
 
 const updateTodo = (todo, updatedValues) => {
   todo.title = updatedValues.title;
@@ -258,4 +280,4 @@ const updateTodo = (todo, updatedValues) => {
   todo.dueDate = updatedValues.dueDate;
   todo.priority = updatedValues.priority;
   displayTodoList();
-}
+};

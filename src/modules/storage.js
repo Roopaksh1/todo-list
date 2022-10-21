@@ -27,8 +27,8 @@ export const fetchProject = (list) => {
             todo._todoID
           )
         );
+        displayProjectName(key);
       }
-      displayProjectName(key);
     }
   }
   displayTodoList();

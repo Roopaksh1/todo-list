@@ -1,6 +1,11 @@
 import { compareAsc, isEqual } from "date-fns";
 import { removeFromStorage, storeProject } from "./storage";
-import { displayProjectName, displayTodoList } from "./todoController";
+import {
+  backToHome,
+  displayProjectName,
+  displayTodoList,
+  removeProject,
+} from "./todoController";
 
 export class Project {
   static list = {};
@@ -9,7 +14,7 @@ export class Project {
     if (todo) {
       this._todoList = [todo];
     } else {
-      this._todoList = []
+      this._todoList = [];
     }
   }
 
@@ -30,8 +35,8 @@ export const addToProject = (name, todo) => {
     const project = new Project(todo);
     Project.list[name] = project;
     storeProject(name, project);
+    displayProjectName(name);
   }
-  displayProjectName(name);
 };
 
 export const getTodoList = (projectName) => {
@@ -49,7 +54,18 @@ export const removeTodo = (todoID, projectName) => {
   const index = list.findIndex((todo) => todo.todoID === todoID);
   list.splice(index, 1);
   removeFromStorage(projectName, index);
+  if (isProjectEmpty(list)) {
+    removeProject(projectName);
+    backToHome();
+  }
   displayTodoList();
+};
+
+export const isProjectEmpty = (list) => {
+  if (list.length === 0) {
+    return true;
+  }
+  return false;
 };
 
 export const getAllTodo = () => {
@@ -93,7 +109,9 @@ const getProjectNameByID = (ID) => {
 export const getTodoByID = (todoID) => {
   for (let project in Project.list) {
     if (Project.list[project].todoList.find((todo) => todo.todoID == todoID)) {
-      return Project.list[project].todoList.find((todo) => todo.todoID == todoID);
+      return Project.list[project].todoList.find(
+        (todo) => todo.todoID == todoID
+      );
     }
   }
-}
+};
